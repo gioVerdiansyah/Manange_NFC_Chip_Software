@@ -11,7 +11,7 @@ const pathRoutes = {
 const routes = [
     {path: pathRoutes.home, content: <App/>},
     {path: pathRoutes.login, content: <LoginView/>},
-    { path: pathRoutes.dashboard, content: <DashboardView/>}
+    {path: pathRoutes.dashboard, content: <DashboardView/>}
 ]
 
 export {pathRoutes, routes}
