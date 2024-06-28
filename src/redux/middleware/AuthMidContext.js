@@ -8,7 +8,7 @@ import { pathRoutes } from "../../routes/web.js";
 const AuthMidContext = createContext();
 
 const AuthProvider = ({ children }) => {
-    const isAuthenticated = useSelector(state => state.loginState)
+    const isAuthenticated = useSelector(state => state.loginState).isLoggedIn
     const dispatch = useDispatch()
     const navigate = useNavigate()
     
@@ -21,8 +21,11 @@ const AuthProvider = ({ children }) => {
     }, []);
 
     useEffect(() => {
+        console.log(isAuthenticated)
         if(!isAuthenticated){
             navigate(pathRoutes.login)
+        }else{
+            navigate(pathRoutes.dashboard)
         }
     }, [isAuthenticated])
     

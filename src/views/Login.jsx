@@ -8,13 +8,15 @@ import {
   setLoginErrorFields,
 } from "../redux/store/loginStore.js";
 import InputLabelComponent from "./core/InputLabel.jsx";
+import { useContext } from "react";
+import { AuthMidContext } from "../redux/middleware/AuthMidContext.js";
 
 export function LoginView() {
   const dispatch = useDispatch();
   const theme = useSelector((state) => state.themeState);
   const fields = useSelector((state) => state.loginState).fields;
   const errorField = useSelector((state) => state.loginState).errorFields;
-  // console.log(errorField)
+  const {loginUser} = useContext(AuthMidContext)
 
   const loginSchema = z.object({
     email: z.string().min(1),
@@ -28,20 +30,20 @@ export function LoginView() {
 
   const handleSubmitData = (e) => {
     e.preventDefault();
+    console.log(fields)
     const result = loginSchema.safeParse(fields);
     if (!result.success) {
       const errors = result.error.formErrors.fieldErrors;
       console.log(errors);
       dispatch(setLoginErrorFields(errors));
     } else {
-      // handle successful login
-      console.log(result.data);
+      loginUser(12345678)
     }
   };
 
   return (
     <main className="w-screen h-screen">
-      <div className="dark-light-mode-toggle absolute right-0">
+      <div className="dark-light-mode-toggle absolute right-3 top-3">
         <label className="swap swap-rotate">
           <input
             type="checkbox"
@@ -84,7 +86,7 @@ export function LoginView() {
                 labelClassName="self-start"
                 error={errorField.email.length > 0}
                 errorMessage={errorField.email}
-                onChange={handleChangeInput}
+                onChangeEvent={handleChangeInput}
               />
             </div>
             <div className="mt-3 mb-3 flex flex-col">
@@ -96,7 +98,7 @@ export function LoginView() {
                 labelClassName="self-start"
                 error={errorField.password.length > 0}
                 errorMessage={errorField.password}
-                onChange={handleChangeInput}
+                onChangeEvent={handleChangeInput}
               />
             </div>
             <button className="btn btn-outline rounded-md btn-primary">

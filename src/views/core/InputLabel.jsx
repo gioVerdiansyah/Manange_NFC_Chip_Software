@@ -11,6 +11,7 @@ export default function InputLabelComponent({
   paraphClassName,
   error = false,
   errorMessage,
+  onChangeEvent
 }) {
   return (
     <>
@@ -18,13 +19,14 @@ export default function InputLabelComponent({
         htmlFor={name}
         className={twMerge(labelClassName, error ? "text-red-500" : "")}
       >
-       {labelName} 
+        {labelName}
       </label>
       <InputComponent
         className={twMerge(inputClassName, error ? "input-error" : "")}
         type={type}
         name={name}
         placeholder={placeholder}
+        onChange={onChangeEvent}
       />
       {error && (
         <p className={twMerge(paraphClassName, error ? "text-red-500" : "")}>
