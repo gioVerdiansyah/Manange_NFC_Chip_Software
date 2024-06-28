@@ -35,7 +35,7 @@ root.render(
           }
           <Route element={<RootLayout/>}>
           {
-            adminRoutes.map((item, i) => <Route index={(i==0)} key={'route-admin' + i} path={item.path} element={item.content}/>)
+            adminRoutes.map((item, i) => <Route index={(i === 0)} key={'route-admin' + i} path={item.path} element={item.content}/>)
           }
           </Route>
         </Routes>
