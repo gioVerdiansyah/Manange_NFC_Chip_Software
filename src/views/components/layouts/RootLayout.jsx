@@ -5,9 +5,9 @@ import NavbarAdmin from '../fragments/NavbarAdmin'
 
 const RootLayout = ({children}) => {
   return (
-    <div>
+    <div className=''>
         <NavbarAdmin/>
-        <main>
+        <main className=''>
             {children}
         </main>
     </div>
