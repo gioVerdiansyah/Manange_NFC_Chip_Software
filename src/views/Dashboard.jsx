@@ -2,14 +2,13 @@ import { Link } from "react-router-dom";
 import { pathRoutes } from "../routes/web";
 import { AuthMidContext } from "../redux/middleware/AuthMidContext";
 import { useContext } from "react";
-import RootLayout from "./components/layouts/RootLayout";
 import { RICON, RXCON } from "../lib/icons";
 
 export function DashboardView() {
     const { isAuthenticated } = useContext(AuthMidContext);
     console.log(isAuthenticated);
     return (
-        <RootLayout>
+        <>
             <div className="flex justify-center items-center h-[80dvh]">
             <article className="grid grid-cols-3 gap-10">
                 <div className="card card-compact bg-base-100 w-96 shadow-xl">
@@ -56,6 +55,6 @@ export function DashboardView() {
                 </div>
             </article>
             </div>
-        </RootLayout>
+        </>
     );
 }

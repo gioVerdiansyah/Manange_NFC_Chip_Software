@@ -1,6 +1,7 @@
 import React from 'react'
 import PT from '../../../utils/PropType'
 import NavbarAdmin from '../fragments/NavbarAdmin'
+import { Outlet } from 'react-router-dom'
 
 
 const RootLayout = ({children}) => {
@@ -8,7 +9,7 @@ const RootLayout = ({children}) => {
     <div className=''>
         <NavbarAdmin/>
         <main className=''>
-            {children}
+            <Outlet/>
         </main>
     </div>
   )
