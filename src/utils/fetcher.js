@@ -1,37 +1,40 @@
-// utils/fetcher.js
-import PT from "./PropType"
+import PT from "./PropType.js";
 
-const fetcher = async (url, options = {}) => {
-    const defaultHeaders = {
-      'Content-Type': 'application/json',
-      'x-api-key': 'your-api-key-value', // Ganti dengan nilai API key yang sesuai
-      ...options.headers, // Izinkan penggantian atau penambahan header tambahan
-    };
-  
-    const requestOptions = {
-      ...options,
-      headers: defaultHeaders,
-    };
-  
-    try {
-      const response = await fetch(url, requestOptions);
-      if (!response.ok) {
-        throw new Error(`HTTP error! Status: ${response.status}`);
-      }
-      return await response.json();
-    } catch (error) {
-      console.error('Error fetching data:', error);
-      throw error;
+const fetcher = async (url, options) => {
+  const myHeaders = new Headers();
+  myHeaders.append("x-api-key", process.env.REACT_APP_API_KEY);
+  myHeaders.append("Content-Type", "application/json");
+
+  if (options?.headers) {
+    const headers = options.headers;
+    for (const [key, value] of Object.entries(headers)) {
+      myHeaders.append(key, value);
     }
+  }
+
+  const requestOptions = {
+    ...options,
+    headers: myHeaders,
   };
 
-  fetcher.propTypes = {
-    url: PT.string.isRequired,
-    options: PT.shape({
-      method: PT.string,
-      headers: PT.object,
-      body: PT.any,
-    }),
-  };
-  
-  export default fetcher;
+  try {
+    const response = await fetch(url, requestOptions);
+    console.log(response)
+    const result = await response.json()
+    return result
+  } catch (error) {
+    console.error('Error fetching data:', error);
+    throw error;
+  }
+};
+
+fetcher.propTypes = {
+  url: PT.string.isRequired,
+  options: PT.shape({
+    method: PT.string,
+    headers: PT.object,
+    body: PT.any,
+  }),
+};
+
+export default fetcher;

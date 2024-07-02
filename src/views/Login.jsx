@@ -10,13 +10,21 @@ import {
 import InputLabelComponent from "./core/InputLabel.jsx";
 import { useContext } from "react";
 import { AuthMidContext } from "../redux/middleware/AuthMidContext.js";
+import fetcher from "../utils/fetcher.js";
+import { apiRoutes } from "../routes/api.js";
+import LoadingAnimation from "./core/LoadingAnimation.jsx";
+import { setLoading } from "../redux/store/loadingStore.js";
+import "react-toastify/dist/ReactToastify.css";
+import { ToastContainer, toast } from "react-toastify";
 
 export function LoginView() {
   const dispatch = useDispatch();
   const theme = useSelector((state) => state.themeState);
   const fields = useSelector((state) => state.loginState).fields;
   const errorField = useSelector((state) => state.loginState).errorFields;
-  const {loginUser} = useContext(AuthMidContext)
+  const isLoading = useSelector((state) => state.isLoadingState).isLoading;
+  console.log(isLoading);
+  const { loginUser } = useContext(AuthMidContext);
 
   const loginSchema = z.object({
     email: z.string().min(1).email(),
@@ -28,21 +36,35 @@ export function LoginView() {
     dispatch(setLoginDataInput({ [name]: value }));
   };
 
-  const handleSubmitData = (e) => {
+  const handleSubmitData = async (e) => {
     e.preventDefault();
-    console.log(fields)
     const result = loginSchema.safeParse(fields);
     if (!result.success) {
       const errors = result.error.formErrors.fieldErrors;
       console.log(errors);
       dispatch(setLoginErrorFields(errors));
     } else {
-      loginUser(12345678)
+      dispatch(setLoading(true));
+      const fResult = await fetcher(apiRoutes.login, {
+        method: "POST",
+        body: JSON.stringify(fields),
+      });
+      setTimeout(() => {
+        dispatch(setLoading(false));
+        console.log(fResult);
+        if(fResult?.meta?.isSuccess){
+          loginUser(fResult?.data)
+          toast.success(fResult?.meta?.message, { autoClose: 5000 });
+        }else{
+          toast.error(fResult?.meta?.message, { autoClose: 5000 });
+        }
+      }, 2000);
     }
   };
 
   return (
     <main className="w-screen h-screen">
+      <ToastContainer />
       <div className="dark-light-mode-toggle absolute right-3 top-3">
         <label className="swap swap-rotate">
           <input
@@ -101,9 +123,19 @@ export function LoginView() {
                 onChangeEvent={handleChangeInput}
               />
             </div>
-            <button className="btn btn-outline rounded-md btn-primary">
-              Login
-            </button>
+            {/* {isLoading && } */}
+            <div className="mt-3 mb-3 flex flex-row items-center">
+              {isLoading ? (
+                <div>
+                  <LoadingAnimation className="w-14" />{" "}
+                  <p className="font-bold ms-3">Loading...</p>
+                </div>
+              ) : (
+                <button className="btn btn-outline rounded-md btn-primary">
+                  Login
+                </button>
+              )}
+            </div>
           </form>
         </div>
       </div>

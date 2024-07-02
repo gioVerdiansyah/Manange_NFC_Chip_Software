@@ -11,31 +11,30 @@ const AuthProvider = ({ children }) => {
     const isAuthenticated = useSelector(state => state.loginState).isLoggedIn
     const dispatch = useDispatch()
     const navigate = useNavigate()
+    const cookieName = process.env.REACT_APP_COOKIE_NAME
     
     useEffect(() => {
-        const hasAccess = Cookie.get("admin");
+        const hasAccess = Cookie.get(cookieName);
 
         if (hasAccess) {
             dispatch(changeLoginStatus(true))
         }
-    }, []);
 
-    useEffect(() => {
-        console.log(isAuthenticated)
-        if(!isAuthenticated){
+        if (!isAuthenticated) {
             navigate(pathRoutes.login)
-        }else{
+        } else {
             navigate(pathRoutes.dashboard)
         }
-    }, [isAuthenticated])
+    }, []);
     
     const loginUser = (token) => {
-        Cookie.set("admin", token, { expires: 14, secure: true, sameSite: 'strict' });
+        Cookie.set(cookieName, token, { expires: 14, secure: true, sameSite: 'strict' });
         dispatch(changeLoginStatus(false))
+        navigate(pathRoutes.dashboard)
     };
     
     const logoutUser = () => {
-        Cookie.remove("admin");
+        Cookie.remove(cookieName);
         dispatch(changeLoginStatus(false))
     };
 

@@ -2,7 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import "./App.css"
 import './index.css';
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import { Route, Routes, HashRouter } from 'react-router-dom';
 import { routes } from './routes/web.js';
 import { Provider } from 'react-redux';
 import { applyMiddleware, createStore } from 'redux';
@@ -27,7 +27,7 @@ const nonAdminRoutes = routes.filter(item => ![
 
 root.render(
   <Provider store={store}>
-    <Router>
+    <HashRouter>
       <AuthProvider>
         <Routes>
           {
@@ -39,8 +39,7 @@ root.render(
           }
           </Route>
         </Routes>
-
       </AuthProvider>
-    </Router>
+    </HashRouter>
   </Provider>
 );

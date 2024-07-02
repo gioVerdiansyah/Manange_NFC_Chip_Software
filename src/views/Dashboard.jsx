@@ -1,12 +1,6 @@
-import { Link } from "react-router-dom";
-import { pathRoutes } from "../routes/web";
-import { AuthMidContext } from "../redux/middleware/AuthMidContext";
-import { useContext } from "react";
 import { RICON, RXCON } from "../lib/icons";
 
 export function DashboardView() {
-    const { isAuthenticated } = useContext(AuthMidContext);
-    console.log(isAuthenticated);
     return (
         <>
             <div className="flex justify-center items-center h-[80dvh]">
