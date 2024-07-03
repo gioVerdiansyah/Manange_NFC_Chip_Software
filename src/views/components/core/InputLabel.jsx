@@ -11,7 +11,8 @@ export default function InputLabelComponent({
   paraphClassName,
   error = false,
   errorMessage,
-  onChangeEvent
+  onChangeEvent,
+  defaultValue = ""
 }) {
   return (
     <>
@@ -25,6 +26,7 @@ export default function InputLabelComponent({
         className={twMerge(inputClassName, error ? "input-error" : "")}
         type={type}
         name={name}
+        defaultValue={defaultValue}
         placeholder={placeholder}
         onChange={onChangeEvent}
       />

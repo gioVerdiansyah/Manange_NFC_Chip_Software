@@ -1,4 +1,5 @@
 import PT from "./PropType.js";
+import Cookie from "js-cookie";
 
 const fetcher = async (url, options) => {
   const myHeaders = new Headers();
@@ -19,7 +20,7 @@ const fetcher = async (url, options) => {
 
   try {
     const response = await fetch(url, requestOptions);
-    console.log(response)
+    if (response.status === 401) Cookie.remove(process.env.REACT_APP_COOKIE_NAME)
     const result = await response.json()
     return result
   } catch (error) {

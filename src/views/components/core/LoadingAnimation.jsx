@@ -1,5 +1,5 @@
 import { twMerge } from "tailwind-merge";
-import loadingGif from "../../assets/gif/loading.gif";
+import loadingGif from "../../../assets/gif/loading.gif";
 
 export default function LoadingAnimation({ ...props }) {
   return (

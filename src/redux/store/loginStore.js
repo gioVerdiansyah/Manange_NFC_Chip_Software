@@ -43,7 +43,7 @@ function loginStore(state = initialState, action) {
         case CHANGE_LOGIN_STATUS:
             return {
                 ...state,
-                isLoggedIn: !state.isLoggedIn,
+                isLoggedIn: state.isLoggedIn,
             };
         case SET_STATE_LOGIN_FIELDS:
             return {

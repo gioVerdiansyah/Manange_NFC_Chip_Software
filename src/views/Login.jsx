@@ -7,13 +7,13 @@ import {
   setLoginDataInput,
   setLoginErrorFields,
 } from "../redux/store/loginStore.js";
-import InputLabelComponent from "./core/InputLabel.jsx";
+import InputLabelComponent from "./components/core/InputLabel.jsx";
 import { useContext } from "react";
 import { AuthMidContext } from "../redux/middleware/AuthMidContext.js";
 import fetcher from "../utils/fetcher.js";
 import { apiRoutes } from "../routes/api.js";
-import LoadingAnimation from "./core/LoadingAnimation.jsx";
-import { setLoading } from "../redux/store/loadingStore.js";
+import LoadingAnimation from "./components/core/LoadingAnimation.jsx";
+import { setLoading } from "../redux/store/trueOrFalseStore.js";
 import "react-toastify/dist/ReactToastify.css";
 import { ToastContainer, toast } from "react-toastify";
 
@@ -22,13 +22,12 @@ export function LoginView() {
   const theme = useSelector((state) => state.themeState);
   const fields = useSelector((state) => state.loginState).fields;
   const errorField = useSelector((state) => state.loginState).errorFields;
-  const isLoading = useSelector((state) => state.isLoadingState).isLoading;
-  console.log(isLoading);
+  const isLoading = useSelector((state) => state.trueOrFalseState).isLoading;
   const { loginUser } = useContext(AuthMidContext);
 
   const loginSchema = z.object({
-    email: z.string().min(1).email(),
-    password: z.string().min(1),
+    email: z.string().email().nonempty("Email is required"),
+    password: z.string().nonempty("Password is required"),
   });
 
   const handleChangeInput = (e) => {
@@ -45,18 +44,18 @@ export function LoginView() {
       dispatch(setLoginErrorFields(errors));
     } else {
       dispatch(setLoading(true));
-      const fResult = await fetcher(apiRoutes.login, {
+      const res = await fetcher(apiRoutes.login, {
         method: "POST",
         body: JSON.stringify(fields),
       });
       setTimeout(() => {
         dispatch(setLoading(false));
-        console.log(fResult);
-        if(fResult?.meta?.isSuccess){
-          loginUser(fResult?.data)
-          toast.success(fResult?.meta?.message, { autoClose: 5000 });
+        console.log(res);
+        if(res?.meta?.isSuccess){
+          loginUser(res?.data)
+          toast.success(res?.meta?.message, { autoClose: 5000 });
         }else{
-          toast.error(fResult?.meta?.message, { autoClose: 5000 });
+          toast.error(res?.meta?.message, { autoClose: 5000 });
         }
       }, 2000);
     }
