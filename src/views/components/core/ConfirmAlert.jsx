@@ -8,11 +8,24 @@ export default async function showConfirmAlert({
   cancelText,
   yesText,
   yesFunc,
+  styleType = "primary"
 }) {
   await AlertConfirm({
     title: (
       <div className="flex flex-row items-center">
-        {Icon && <Icon className="text-red-600 text-2xl" />}
+        {Icon && (
+          <Icon
+            className={`text-2xl ${
+              styleType === "danger"
+                ? "text-red-600"
+                : styleType === "warning"
+                ? "text-yellow-400"
+                : styleType === "primary"
+                ? "text-blue-600"
+                : ""
+            }`}
+          />
+        )}
         <p className="font-bold !ml-1">{title}</p>
       </div>
     ),
@@ -28,7 +41,18 @@ export default async function showConfirmAlert({
           <Button className="pointer" onClick={() => dispatch("cancel")}>
             {cancelText ?? "Cancel"}
           </Button>
-          <Button onClick={() => dispatch("yes")} styleType="danger">
+          <Button
+            onClick={() => dispatch("yes")}
+            className={`!text-white ${
+              styleType === "danger"
+                ? "!bg-red-600"
+                : styleType === "warning"
+                ? "!bg-yellow-400"
+                : styleType === "primary"
+                ? "!bg-blue-600"
+                : ""
+            }`}
+          >
             {yesText ?? "Yes"}
           </Button>
         </>

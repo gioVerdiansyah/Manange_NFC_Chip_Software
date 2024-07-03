@@ -46,7 +46,6 @@ const Machine = () => {
   };
 
   const handleSendData = async (modalType, method) => {
-    console.log(fields);
     try {
       const res = await fetcher(apiRoutes.nfc, {
         method: method,
@@ -59,8 +58,6 @@ const Machine = () => {
 
       await new Promise((resolve) => setTimeout(resolve, 1000));
 
-      console.log(res);
-
       if (res?.meta?.isSuccess) {
         document.getElementById(modalType).close();
         toast.success(res?.meta?.message, { autoClose: 5000 });
@@ -70,7 +67,6 @@ const Machine = () => {
 
       return res?.meta?.isSuccess;
     } catch (error) {
-      console.error("Error sending data:", error);
       toast.error("Failed to send data", { autoClose: 5000 });
       return false;
     }
@@ -78,7 +74,6 @@ const Machine = () => {
 
   useEffect(() => {
     fetchMachineData();
-    console.log(machineData);
   }, []);
 
   const handleDeleteMachine = async (data) => {
@@ -87,6 +82,7 @@ const Machine = () => {
       yesFunc,
       title: "Are you sure to delete?",
       description: data.machine_name + " Machine?",
+      styleType: "danger"
     });
 
     async function yesFunc() {

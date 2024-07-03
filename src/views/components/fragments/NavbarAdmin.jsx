@@ -7,23 +7,34 @@ import fetcher from "../../../utils/fetcher";
 import { apiRoutes } from "../../../routes/api";
 import "react-toastify/dist/ReactToastify.css";
 import { ToastContainer, toast } from "react-toastify";
+import showConfirmAlert from "../core/ConfirmAlert";
+import { IoIosInformationCircle } from "react-icons/io";
 
 const NavbarAdmin = () => {
   const navigate = useNavigate();
   const cookieName = process.env.REACT_APP_COOKIE_NAME;
   const handleLogout = async () => {
-    const res = await fetcher(apiRoutes.logout, {
-      method: "POST",
-      headers: {
-        Authorization: "Bearer " + Cookie.get(cookieName),
-      },
-    });
-    if (res?.meta?.isSuccess) {
-      Cookie.remove(cookieName);
-      navigate(pathRoutes.login);
-    } else {
-      toast(res?.meta?.message)
-    }
+        showConfirmAlert({
+          Icon: IoIosInformationCircle,
+          yesFunc,
+          title: "Are you sure to Logout?",
+          description: "",
+          styleType: "warning"
+        });
+        async function yesFunc() {
+          const res = await fetcher(apiRoutes.logout, {
+            method: "POST",
+            headers: {
+              Authorization: "Bearer " + Cookie.get(cookieName),
+            },
+          });
+          if (res?.meta?.isSuccess) {
+            Cookie.remove(cookieName);
+            navigate(pathRoutes.login);
+          } else {
+            toast(res?.meta?.message)
+          }
+        }
   };
 
   return (
