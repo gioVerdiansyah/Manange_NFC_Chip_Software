@@ -60,14 +60,14 @@ export default function Pagination({ apiRoute, fetchingFunc, data }) {
             }
             className={
               "join-item h-9 min-h-8 btn " +
-              (item === data.current_page ? "!text-blue-400 btn-disabled" : "")
+              (item === data.current_page ? "!text-green-400 btn-disabled" : "")
             }
           >
             {item}
           </button>
         ))}
         {data.current_page >= 5 && (
-          <p className="join-item h-9 min-h-8 btn !text-blue-400 btn-disabled">
+          <p className="join-item h-9 min-h-8 btn !text-green-400 btn-disabled">
             {data.current_page}
           </p>
         )}

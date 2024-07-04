@@ -18,6 +18,8 @@ import showLoadingAlert, {
 } from "./components/core/ShowLoadingAlert.jsx";
 import Cookies from "js-cookie";
 import Pagination from "./components/core/Pagination.jsx";
+import InputComponent from "./components/core/Input.jsx";
+import { MdOutlineSearch } from "react-icons/md";
 
 const Machine = () => {
   const dispatch = useDispatch();
@@ -73,10 +75,6 @@ const Machine = () => {
     }
   };
 
-  useEffect(() => {
-    fetchMachineData();
-  }, []);
-
   const handleDeleteMachine = async (data) => {
     showConfirmAlert({
       Icon: IoWarningOutline,
@@ -109,6 +107,28 @@ const Machine = () => {
     }
   };
 
+  const handleSearchNfc = async (e) => {
+    e.preventDefault();
+    const query = e.target.query.value;
+    console.log(query);
+    const res = await fetcher(apiRoutes.nfcSearch + query, {
+      headers: {
+        Authorization:
+          "Bearer " + Cookie.get(process.env.REACT_APP_COOKIE_NAME),
+      },
+    });
+    if (res?.meta?.isSuccess) {
+      console.log(res);
+      dispatch(setMachineData(res.data));
+    } else {
+      toast.error(res?.meta?.message);
+    }
+  };
+
+  useEffect(() => {
+    fetchMachineData();
+  }, []);
+
   return (
     <div className="px-20">
       <ManageMachineModal
@@ -122,18 +142,37 @@ const Machine = () => {
         onSubmit={() => handleSendData("edit", "PUT")}
       />
 
-      <article className="p-10 flex items-center justify-between">
+      <article
+        className="px-10 py-3 flex items-center justify-between rounded-md"
+        style={{ boxShadow: "0px 0px 10px rgb(0,0,0,0.2)" }}
+      >
         <h1 className="text-2xl font-extrabold text-primary">
           3D Machine Data
         </h1>
+        <form className="pl-10" onSubmit={handleSearchNfc}>
+          <InputComponent
+            className="w-40 px-3 !h-9"
+            name="query"
+            placeholder="Search..."
+          />
+          <button
+            type="submit"
+            className="h-9 min-h-8 btn btn-outline btn-primary ml-2"
+          >
+            <MdOutlineSearch />
+          </button>
+        </form>
         <button
           onClick={() => document.getElementById("add").showModal()}
-          className="btn btn-outline btn-primary"
+          className="btn btn-outline btn-primary h-9 min-h-8"
         >
           Tambah
         </button>
       </article>
-      <article>
+      <article
+        className="mt-10 px-5 rounded-md py-5"
+        style={{ boxShadow: "0px 0px 10px rgb(0,0,0,0.2)" }}
+      >
         <table className="table mx-auto table-zebra">
           <thead>
             <tr>

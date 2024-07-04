@@ -38,7 +38,10 @@ const NavbarAdmin = () => {
   };
 
   return (
-    <div className="navbar bg-base-100">
+    <div
+      className="navbar bg-base-100 mb-10"
+      style={{ boxShadow: "0px 0px 10px rgb(0,0,0,0.2)" }}
+    >
       <ToastContainer />
       <div className="navbar-start">
         <div className="dropdown">
