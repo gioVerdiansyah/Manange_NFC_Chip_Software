@@ -17,6 +17,7 @@ import showLoadingAlert, {
   closeLoadingAlert,
 } from "./components/core/ShowLoadingAlert.jsx";
 import Cookies from "js-cookie";
+import Pagination from "./components/core/Pagination.jsx";
 
 const Machine = () => {
   const dispatch = useDispatch();
@@ -26,9 +27,9 @@ const Machine = () => {
     (state) => state.manageMachineState
   ).machine_data;
 
-  const fetchMachineData = async () => {
+  const fetchMachineData = async (url = apiRoutes.nfc) => {
     dispatch(setLoading(true));
-    const res = await fetcher(apiRoutes.nfc, {
+    const res = await fetcher(url, {
       method: "GET",
       headers: {
         Authorization:
@@ -82,7 +83,7 @@ const Machine = () => {
       yesFunc,
       title: "Are you sure to delete?",
       description: data.machine_name + " Machine?",
-      styleType: "danger"
+      styleType: "danger",
     });
 
     async function yesFunc() {
@@ -97,7 +98,7 @@ const Machine = () => {
       });
 
       setTimeout(() => {
-        fetchMachineData()
+        fetchMachineData();
         closeLoadingAlert();
         if (res?.meta?.isSuccess) {
           toast.success(res?.meta?.message);
@@ -192,6 +193,13 @@ const Machine = () => {
             )}
           </tbody>
         </table>
+        {machineData.data && (
+          <Pagination
+            apiRoute={apiRoutes.nfc}
+            fetchingFunc={fetchMachineData}
+            data={machineData.pagination}
+          />
+        )}
       </article>
     </div>
   );

@@ -105,6 +105,7 @@ export function LoginView() {
                 name="email"
                 placeholder="Enter Admin Email"
                 labelClassName="self-start"
+                defaultValue={fields.email}
                 error={errorField.email.length > 0}
                 errorMessage={errorField.email}
                 onChangeEvent={handleChangeInput}
@@ -117,6 +118,7 @@ export function LoginView() {
                 name="password"
                 placeholder="Enter Admin Password"
                 labelClassName="self-start"
+                defaultValue={fields.password}
                 error={errorField.password.length > 0}
                 errorMessage={errorField.password}
                 onChangeEvent={handleChangeInput}
