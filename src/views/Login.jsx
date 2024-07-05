@@ -1,5 +1,5 @@
 import { useDispatch, useSelector } from "react-redux";
-import { logoUTSDark, logoUTSWhite } from "../assets/images/index.js";
+import { logoUTSDark, logoUTSWhite } from "../assets/index.js";
 import { changeTheme } from "../redux/store/themeStore.js";
 import "../App.css";
 import { z } from "zod";

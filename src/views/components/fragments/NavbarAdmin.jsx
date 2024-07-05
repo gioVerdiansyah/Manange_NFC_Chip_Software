@@ -9,32 +9,33 @@ import "react-toastify/dist/ReactToastify.css";
 import { ToastContainer, toast } from "react-toastify";
 import showConfirmAlert from "../core/ConfirmAlert";
 import { IoIosInformationCircle } from "react-icons/io";
+import { BsList } from "react-icons/bs";
 
 const NavbarAdmin = () => {
   const navigate = useNavigate();
   const cookieName = process.env.REACT_APP_COOKIE_NAME;
   const handleLogout = async () => {
-        showConfirmAlert({
-          Icon: IoIosInformationCircle,
-          yesFunc,
-          title: "Are you sure to Logout?",
-          description: "",
-          styleType: "warning"
-        });
-        async function yesFunc() {
-          const res = await fetcher(apiRoutes.logout, {
-            method: "POST",
-            headers: {
-              Authorization: "Bearer " + Cookie.get(cookieName),
-            },
-          });
-          if (res?.meta?.isSuccess) {
-            Cookie.remove(cookieName);
-            navigate(pathRoutes.login);
-          } else {
-            toast(res?.meta?.message)
-          }
-        }
+    showConfirmAlert({
+      Icon: IoIosInformationCircle,
+      yesFunc,
+      title: "Are you sure to Logout?",
+      description: "",
+      styleType: "warning",
+    });
+    async function yesFunc() {
+      const res = await fetcher(apiRoutes.logout, {
+        method: "POST",
+        headers: {
+          Authorization: "Bearer " + Cookie.get(cookieName),
+        },
+      });
+      if (res?.meta?.isSuccess) {
+        Cookie.remove(cookieName);
+        navigate(pathRoutes.login);
+      } else {
+        toast(res?.meta?.message);
+      }
+    }
   };
 
   return (
@@ -43,27 +44,19 @@ const NavbarAdmin = () => {
       style={{ boxShadow: "0px 0px 10px rgb(0,0,0,0.2)" }}
     >
       <ToastContainer />
-      <div className="navbar-start">
+      <div className="navbar-center">
+        <Link to={pathRoutes.dashboard}>
+          <img className="w-40 object-cover" src={Logo} alt="UT School" />
+        </Link>
+      </div>
+      <div className="absolute right-5">
         <div className="dropdown">
           <div tabIndex={0} role="button" className="btn btn-ghost btn-circle">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              className="h-5 w-5"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth="2"
-                d="M4 6h16M4 12h16M4 18h7"
-              />
-            </svg>
+            <BsList className="text-3xl font-medium" />
           </div>
           <ul
             tabIndex={0}
-            className="menu menu-sm dropdown-content bg-base-100 rounded-box z-[1] mt-3 w-52 p-2 shadow"
+            className="menu menu-sm dropdown-content bg-base-100 rounded-box z-[1] mt-3 w-52 p-2 shadow -translate-x-32"
           >
             <li>
               <Link to="/dashboard">Dashboard</Link>
@@ -72,18 +65,10 @@ const NavbarAdmin = () => {
               <Link to="/machine">Machine</Link>
             </li>
             <li>
-              <Link to="/log-activity">Activity</Link>
+              <button onClick={() => handleLogout()}>Logout</button>
             </li>
           </ul>
         </div>
-      </div>
-      <div className="navbar-center">
-        <img className="w-40 object-cover" src={Logo} alt="UT School" />
-      </div>
-      <div className="navbar-end">
-        <button onClick={() => handleLogout()} className="btn btn-primary">
-          Logout
-        </button>
       </div>
     </div>
   );

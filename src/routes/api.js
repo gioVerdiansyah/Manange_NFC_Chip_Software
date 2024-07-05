@@ -5,4 +5,5 @@ export const apiRoutes = {
     logout: url + "admin/logout",
     nfc: url + "admin/nfc",
     nfcSearch: url + "admin/nfc/search/",
+    dashboardData: url + "admin/dashboard"
 }
