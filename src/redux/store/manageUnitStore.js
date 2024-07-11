@@ -1,42 +1,37 @@
-const ADD_MACHINE = "ADD_MACHINE"
+const ADD_UNIT = "ADD_UNIT"
 const FIELDS_ERROR = "FIELDS_ERROR"
-const MACHINE_DATA = "MACHINE_DATA"
+const UNIT_DATA = "UNIT_DATA"
 
-export function setMachineFields(data) {
+export function setUnitFields(data) {
     return {
-        type: ADD_MACHINE,
+        type: ADD_UNIT,
         data
     }
 }
 
-export function setFieldsMachineError(data) {
+export function setFieldsUnitError(data) {
     return {
         type: FIELDS_ERROR,
         data
     }
 }
 
-export function setMachineData(data) {
+export function setUnitData(data) {
     return {
-        type: MACHINE_DATA,
+        type: UNIT_DATA,
         data
     }
 }
 
-const fields = {
-    scene_id: "",
-    machine_name: ""
-}
-
 const initialState = {
-    fields: { id: "", ...fields },
-    errors: fields,
-    machine_data: {}
+    fields: { scene_id: "", unit_id: "" },
+    errors: { unit_id: "" },
+    unit_data: {}
 }
 
-function manageMachineStore(state = initialState, action) {
+function manageUnitStore(state = initialState, action) {
     switch (action.type) {
-        case ADD_MACHINE:
+        case ADD_UNIT:
             return {
                 ...state,
                 fields: {
@@ -52,17 +47,14 @@ function manageMachineStore(state = initialState, action) {
                     ...action.data
                 }
             }
-        case MACHINE_DATA:
+        case UNIT_DATA:
             return {
                 ...state,
-                machine_data: {
-                    ...state.machine_data,
-                    ...action.data
-                }
+                unit_data: action.data
             }
         default:
             return state
     }
 }
 
-export default manageMachineStore
+export default manageUnitStore

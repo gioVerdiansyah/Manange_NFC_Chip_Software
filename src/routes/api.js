@@ -3,7 +3,8 @@ const url = process.env.REACT_APP_API_URL
 export const apiRoutes = {
     login: url + "admin/login",
     logout: url + "admin/logout",
-    nfc: url + "admin/nfc",
-    nfcSearch: url + "admin/nfc/search/",
+    scene: url + "admin/scene",
+    units: url + "admin/units",
+    sceneSearch: url + "admin/scene/search/",
     dashboardData: url + "admin/dashboard"
 }

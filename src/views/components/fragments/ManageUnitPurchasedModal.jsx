@@ -1,29 +1,31 @@
 import { useDispatch, useSelector } from "react-redux";
-import {
-  setFieldsMachineError,
-  setMachineFields,
-} from "../../../redux/store/manageMachineStore";
 import Modal from "../core/Modal";
 import LoadingAnimation from "../core/LoadingAnimation";
 import { setLoading } from "../../../redux/store/trueOrFalseStore";
 import { z } from "zod";
 import InputLabelComponent from "../core/InputLabel";
+import {
+  setFieldsUnitError,
+  setUnitFields,
+} from "../../../redux/store/manageUnitStore";
 
-export default function ManageMachineModal({ id, title, onSubmit }) {
+export default function ManageUnitPurchasedModal({ id, title, onSubmit }) {
   const dispatch = useDispatch();
   const isLoading = useSelector((state) => state.trueOrFalseState).isLoading;
-  const fields = useSelector((state) => state.manageMachineState).fields;
-  const errorFields = useSelector((state) => state.manageMachineState).errors;
-  const zeroFields = { machine_name: "", scene_id: "" };
+  const fields = useSelector((state) => state.manageUnitState).fields;
+  console.log(fields)
+  const list_machine = useSelector((state) => state.manageUnitState).unit_data
+    ?.machine_state;
+  const errorFields = useSelector((state) => state.manageUnitState).errors;
+  const zeroFields = { scene_id: "", unit_id: "" };
 
   const handleChangeInput = (e) => {
     const { name, value } = e.target;
-    dispatch(setMachineFields({ [name]: value }));
+    dispatch(setUnitFields({ [name]: value }));
   };
 
   const storeSchema = z.object({
-    scene_id: z.string().nonempty("Machine Scene ID is required"),
-    machine_name: z.string().nonempty("Machine Name is required"),
+    unit_id: z.string().nonempty("Machine Scene ID is required"),
   });
 
   const handleOnSubmit = async (e) => {
@@ -31,21 +33,21 @@ export default function ManageMachineModal({ id, title, onSubmit }) {
     const result = storeSchema.safeParse(fields);
     if (!result.success) {
       const errors = result.error.formErrors.fieldErrors;
-      dispatch(setFieldsMachineError(errors));
+      dispatch(setFieldsUnitError(errors));
     } else {
       dispatch(setLoading(true));
-      dispatch(setFieldsMachineError(zeroFields));
+      dispatch(setFieldsUnitError(zeroFields));
       const hasSubmit = await onSubmit();
       console.log(hasSubmit);
       if (hasSubmit) {
-        handleResetStateFields()
+        handleResetStateFields();
       }
     }
   };
 
   const handleResetStateFields = () => {
-    dispatch(setMachineFields(zeroFields));
-    dispatch(setFieldsMachineError(zeroFields));
+    dispatch(setUnitFields(zeroFields));
+    dispatch(setFieldsUnitError(zeroFields));
   };
 
   return (
@@ -65,32 +67,37 @@ export default function ManageMachineModal({ id, title, onSubmit }) {
         onSubmit={handleOnSubmit}
       >
         <div className="flex flex-col">
+          <select
+            className="select select-bordered w-full"
+            onChange={(e) => {
+              console.log(e.target.value);
+
+              dispatch(setUnitFields({ scene_id: e.target.value }));
+            }}
+          >
+            <option disabled selected>
+              Select 3D machine
+            </option>
+            {list_machine &&
+              list_machine.map((item, index) => (
+                <option key={index} value={item.scene_id}>
+                  {item.machine_name}
+                </option>
+              ))}
+          </select>
+        </div>
+        <div className="flex flex-col">
           <InputLabelComponent
             labelName="Machine Name"
             type="text"
-            name="machine_name"
-            id="machineName"
+            name="unit_id"
+            id="unitID"
             className="input input-bordered w-full"
-            placeholder="Machine Name"
+            placeholder="Unit ID"
             labelClassName="self-start"
-            defaultValue={fields.machine_name}
-            error={errorFields.machine_name.length > 0}
-            errorMessage={errorFields.machine_name}
-            onChangeEvent={handleChangeInput}
-          />
-        </div>
-        <div className="mt-3 mb-3 flex flex-col">
-          <InputLabelComponent
-            labelName="Machine ID"
-            type="text"
-            name="scene_id"
-            id="sceneId"
-            className="input input-bordered w-full"
-            placeholder="This for Scene ID"
-            labelClassName="self-start"
-            defaultValue={fields.scene_id}
-            error={errorFields.scene_id.length > 0}
-            errorMessage={errorFields.scene_id}
+            defaultValue={fields.unit_id}
+            error={errorFields.unit_id.length > 0}
+            errorMessage={errorFields.unit_id}
             onChangeEvent={handleChangeInput}
           />
         </div>

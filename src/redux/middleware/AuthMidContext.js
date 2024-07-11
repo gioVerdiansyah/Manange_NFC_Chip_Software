@@ -28,7 +28,7 @@ const AuthProvider = ({ children }) => {
     }, []);
     
     const loginUser = (token) => {
-        Cookie.set(cookieName, token, { expires: 3, secure: true, sameSite: 'strict' });
+        Cookie.set(cookieName, token, { expires: 3 });
         dispatch(changeLoginStatus(false))
         navigate(pathRoutes.dashboard)
     };

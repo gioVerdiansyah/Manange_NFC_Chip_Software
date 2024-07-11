@@ -24,6 +24,7 @@ export function DashboardView() {
       },
     });
 
+    // console.log(res)
     if (res?.meta?.isSuccess) {
       console.log(res);
       dispatch(setDashbaordData(res?.data));

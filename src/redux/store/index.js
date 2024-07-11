@@ -4,13 +4,15 @@ import themeStore from "./themeStore.js";
 import manageMachineStore from "./manageMachineStore.js";
 import trueOrFalseStore from "./trueOrFalseStore.js";
 import dashboardDataStore from "./dashboardDataStore.js";
+import manageUnitStore from "./manageUnitStore.js";
 
 const storeStates = combineReducers({
     loginState: loginStore,
     themeState: themeStore,
     trueOrFalseState: trueOrFalseStore,
     manageMachineState: manageMachineStore,
-    dashboardState: dashboardDataStore
+    dashboardState: dashboardDataStore,
+    manageUnitState: manageUnitStore,
 })
 
 export default storeStates
