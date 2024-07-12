@@ -18,12 +18,14 @@ import { MdOutlineSearch } from "react-icons/md";
 import NavbarAdmin from "./components/fragments/NavbarAdmin.jsx";
 import ManageUnitPurchasedModal from "./components/fragments/ManageUnitPurchasedModal.jsx";
 import { setUnitData, setUnitFields } from "../redux/store/manageUnitStore.js";
+import { setSearchField } from "../redux/store/searchStore.js";
 
 const UnitsPurchased = () => {
   const dispatch = useDispatch();
   const fields = useSelector((state) => state.manageUnitState).fields;
   const isLoading = useSelector((state) => state.trueOrFalseState).isLoading;
   const machineData = useSelector((state) => state.manageUnitState).unit_data;
+  const searchField = useSelector((state) => state.searchFieldState).fields;
 
   const fetchMachineData = async (url = apiRoutes.units) => {
     dispatch(setLoading(true));
@@ -34,7 +36,7 @@ const UnitsPurchased = () => {
           "Bearer " + Cookie.get(process.env.REACT_APP_COOKIE_NAME),
       },
     });
-    console.log(res)
+    console.log(res);
     if (res?.meta?.isSuccess) {
       dispatch(setUnitData(res.data));
       setTimeout(() => {
@@ -82,7 +84,7 @@ const UnitsPurchased = () => {
       Icon: IoWarningOutline,
       yesFunc,
       title: "Are you sure to delete?",
-      description: data.machine_name + " Machine?",
+      description: data.unit_id + " NFC ID Machine?",
       styleType: "danger",
     });
 
@@ -90,7 +92,7 @@ const UnitsPurchased = () => {
       showLoadingAlert();
       const res = await fetcher(apiRoutes.units, {
         method: "DELETE",
-        body: JSON.stringify({ id: data.id }),
+        body: JSON.stringify(data),
         headers: {
           Authorization:
             "Bearer " + Cookies.get(process.env.REACT_APP_COOKIE_NAME),
@@ -111,19 +113,21 @@ const UnitsPurchased = () => {
 
   const handleSearchUnit = async (e) => {
     e.preventDefault();
-    const query = e.target.query.value;
-    console.log(query);
-    const res = await fetcher(apiRoutes.sceneSearch + query, {
-      headers: {
-        Authorization:
-          "Bearer " + Cookie.get(process.env.REACT_APP_COOKIE_NAME),
-      },
-    });
-    if (res?.meta?.isSuccess) {
-      console.log(res);
-      dispatch(setUnitData(res.data));
+    const query = searchField;
+    if (!query || query.trim() === "") {
+      fetchMachineData();
     } else {
-      toast.error(res?.meta?.message);
+      const res = await fetcher(apiRoutes.unitSearch + query, {
+        headers: {
+          Authorization:
+            "Bearer " + Cookie.get(process.env.REACT_APP_COOKIE_NAME),
+        },
+      });
+      if (res?.meta?.isSuccess) {
+        dispatch(setUnitData(res.data));
+      } else {
+        toast.error(res?.meta?.message);
+      }
     }
   };
 
@@ -158,6 +162,8 @@ const UnitsPurchased = () => {
               className="w-40 px-3 !h-9"
               name="query"
               placeholder="Search Unit ID..."
+              defaultValue={searchField}
+              onChange={(e) => dispatch(setSearchField(e.target.value))}
             />
             <button
               type="submit"
@@ -168,7 +174,8 @@ const UnitsPurchased = () => {
           </form>
           <button
             onClick={() => {
-              document.getElementById("add").showModal()}}
+              document.getElementById("add").showModal();
+            }}
             className="btn btn-outline btn-primary h-9 min-h-8"
           >
             Tambah
@@ -237,7 +244,11 @@ const UnitsPurchased = () => {
           </table>
           {machineData.data && (
             <Pagination
-              apiRoute={apiRoutes.scene}
+              apiRoute={
+                searchField && searchField.trim() !== ""
+                  ? apiRoutes.unitSearch + searchField
+                  : apiRoutes.units
+              }
               fetchingFunc={fetchMachineData}
               data={machineData.pagination}
             />

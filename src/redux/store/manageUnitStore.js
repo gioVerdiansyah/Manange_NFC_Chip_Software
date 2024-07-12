@@ -1,6 +1,7 @@
 const ADD_UNIT = "ADD_UNIT"
 const FIELDS_ERROR = "FIELDS_ERROR"
 const UNIT_DATA = "UNIT_DATA"
+const RESET_UNIT_STATE = "RESET_UNIT_STATE"
 
 export function setUnitFields(data) {
     return {
@@ -23,9 +24,15 @@ export function setUnitData(data) {
     }
 }
 
+export function resetUnitState() {
+    return {
+        type: RESET_UNIT_STATE,
+    }
+}
+
 const initialState = {
-    fields: { scene_id: "", unit_id: "" },
-    errors: { unit_id: "" },
+    fields: {},
+    errors: { unit_id: "", scene_id: "" },
     unit_data: {}
 }
 
@@ -47,6 +54,11 @@ function manageUnitStore(state = initialState, action) {
                     ...action.data
                 }
             }
+        case RESET_UNIT_STATE:
+            return {
+                ...initialState,
+                unit_data: state.unit_data
+            };
         case UNIT_DATA:
             return {
                 ...state,

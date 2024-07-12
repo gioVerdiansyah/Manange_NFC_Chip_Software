@@ -5,23 +5,31 @@ import { setLoading } from "../../../redux/store/trueOrFalseStore";
 import { z } from "zod";
 import InputLabelComponent from "../core/InputLabel";
 import {
+  resetUnitState,
   setFieldsUnitError,
   setUnitFields,
 } from "../../../redux/store/manageUnitStore";
+import { useEffect, useState } from "react";
 
 export default function ManageUnitPurchasedModal({ id, title, onSubmit }) {
   const dispatch = useDispatch();
   const isLoading = useSelector((state) => state.trueOrFalseState).isLoading;
   const fields = useSelector((state) => state.manageUnitState).fields;
-  console.log(fields)
   const list_machine = useSelector((state) => state.manageUnitState).unit_data
     ?.machine_state;
   const errorFields = useSelector((state) => state.manageUnitState).errors;
-  const zeroFields = { scene_id: "", unit_id: "" };
+  const zeroFields = { unit_id: "", scene_id: "" };
+
+  const [unitId, setUnitId] = useState();
 
   const handleChangeInput = (e) => {
-    const { name, value } = e.target;
-    dispatch(setUnitFields({ [name]: value }));
+    const { value } = e.target;
+    setUnitId(value);
+    dispatch(
+      setUnitFields({
+        updated_unit_id: value,
+      })
+    );
   };
 
   const storeSchema = z.object({
@@ -30,7 +38,7 @@ export default function ManageUnitPurchasedModal({ id, title, onSubmit }) {
 
   const handleOnSubmit = async (e) => {
     e.preventDefault();
-    const result = storeSchema.safeParse(fields);
+    const result = storeSchema.safeParse({ unit_id: unitId });
     if (!result.success) {
       const errors = result.error.formErrors.fieldErrors;
       dispatch(setFieldsUnitError(errors));
@@ -38,7 +46,6 @@ export default function ManageUnitPurchasedModal({ id, title, onSubmit }) {
       dispatch(setLoading(true));
       dispatch(setFieldsUnitError(zeroFields));
       const hasSubmit = await onSubmit();
-      console.log(hasSubmit);
       if (hasSubmit) {
         handleResetStateFields();
       }
@@ -46,16 +53,22 @@ export default function ManageUnitPurchasedModal({ id, title, onSubmit }) {
   };
 
   const handleResetStateFields = () => {
-    dispatch(setUnitFields(zeroFields));
-    dispatch(setFieldsUnitError(zeroFields));
+    dispatch(resetUnitState());
   };
+
+  useEffect(() => {
+    setUnitId(fields.unit_id);
+    if (list_machine?.length > 0) {
+      dispatch(setUnitFields({ scene_id_after: list_machine[0].scene_id }));
+    }
+  }, [dispatch, list_machine, fields.unit_id]);
 
   return (
     <Modal id={id}>
       <form method="dialog">
         <button
           className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2"
-          onClick={handleResetStateFields}
+          onClick={() => handleResetStateFields()}
         >
           ✕
         </button>
@@ -67,20 +80,29 @@ export default function ManageUnitPurchasedModal({ id, title, onSubmit }) {
         onSubmit={handleOnSubmit}
       >
         <div className="flex flex-col">
+          <label htmlFor="select_scene">Select Machine Type</label>
           <select
+            id="select_scene"
             className="select select-bordered w-full"
-            onChange={(e) => {
-              console.log(e.target.value);
-
-              dispatch(setUnitFields({ scene_id: e.target.value }));
-            }}
+            required
+            onChange={(e) =>
+              dispatch(
+                setUnitFields({
+                  scene_id_after: e.target.value,
+                  scene_id_before: fields.scene_id,
+                })
+              )
+            }
           >
-            <option disabled selected>
-              Select 3D machine
-            </option>
             {list_machine &&
               list_machine.map((item, index) => (
-                <option key={index} value={item.scene_id}>
+                <option
+                  key={index}
+                  value={item.scene_id}
+                  {...(fields.scene_id === item.scene_id
+                    ? { selected: true }
+                    : {})}
+                >
                   {item.machine_name}
                 </option>
               ))}
@@ -88,14 +110,14 @@ export default function ManageUnitPurchasedModal({ id, title, onSubmit }) {
         </div>
         <div className="flex flex-col">
           <InputLabelComponent
-            labelName="Machine Name"
+            labelName="NFC ID Machine"
             type="text"
             name="unit_id"
             id="unitID"
             className="input input-bordered w-full"
             placeholder="Unit ID"
             labelClassName="self-start"
-            defaultValue={fields.unit_id}
+            defaultValue={unitId}
             error={errorFields.unit_id.length > 0}
             errorMessage={errorFields.unit_id}
             onChangeEvent={handleChangeInput}

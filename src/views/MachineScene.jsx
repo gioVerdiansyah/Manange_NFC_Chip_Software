@@ -21,6 +21,7 @@ import Pagination from "./components/core/Pagination.jsx";
 import InputComponent from "./components/core/Input.jsx";
 import { MdOutlineSearch } from "react-icons/md";
 import NavbarAdmin from "./components/fragments/NavbarAdmin.jsx";
+import { setSearchField } from "../redux/store/searchStore.js";
 
 const MachineScene = () => {
   const dispatch = useDispatch();
@@ -29,6 +30,7 @@ const MachineScene = () => {
   const machineData = useSelector(
     (state) => state.manageMachineState
   ).machine_data;
+  const searchField = useSelector((state) => state.searchFieldState).fields;
 
   const fetchMachineData = async (url = apiRoutes.scene) => {
     dispatch(setLoading(true));
@@ -114,19 +116,22 @@ const MachineScene = () => {
 
   const handleSearchNfc = async (e) => {
     e.preventDefault();
-    const query = e.target.query.value;
-    console.log(query);
-    const res = await fetcher(apiRoutes.sceneSearch + query, {
-      headers: {
-        Authorization:
-          "Bearer " + Cookie.get(process.env.REACT_APP_COOKIE_NAME),
-      },
-    });
-    if (res?.meta?.isSuccess) {
-      console.log(res);
-      dispatch(setMachineData(res.data));
+    const query = searchField;
+    if (!query || query.trim() === "") {
+      fetchMachineData();
     } else {
-      toast.error(res?.meta?.message);
+      const res = await fetcher(apiRoutes.sceneSearch + query, {
+        headers: {
+          Authorization:
+            "Bearer " + Cookie.get(process.env.REACT_APP_COOKIE_NAME),
+        },
+      });
+      if (res?.meta?.isSuccess) {
+        console.log(res);
+        dispatch(setMachineData(res.data));
+      } else {
+        toast.error(res?.meta?.message);
+      }
     }
   };
 
@@ -161,6 +166,8 @@ const MachineScene = () => {
               className="w-40 px-3 !h-9"
               name="query"
               placeholder="Search..."
+              defaultValue={searchField}
+              onChange={(e) => dispatch(setSearchField(e.target.value))}
             />
             <button
               type="submit"
@@ -241,7 +248,11 @@ const MachineScene = () => {
           </table>
           {machineData.data && (
             <Pagination
-              apiRoute={apiRoutes.scene}
+              apiRoute={
+                searchField && searchField.trim() !== ""
+                  ? apiRoutes.sceneSearch + searchField
+                  : apiRoutes.scene
+              }
               fetchingFunc={fetchMachineData}
               data={machineData.pagination}
             />

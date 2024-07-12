@@ -5,6 +5,7 @@ import manageMachineStore from "./manageMachineStore.js";
 import trueOrFalseStore from "./trueOrFalseStore.js";
 import dashboardDataStore from "./dashboardDataStore.js";
 import manageUnitStore from "./manageUnitStore.js";
+import searchStore from "./searchStore.js";
 
 const storeStates = combineReducers({
     loginState: loginStore,
@@ -13,6 +14,7 @@ const storeStates = combineReducers({
     manageMachineState: manageMachineStore,
     dashboardState: dashboardDataStore,
     manageUnitState: manageUnitStore,
+    searchFieldState: searchStore
 })
 
 export default storeStates

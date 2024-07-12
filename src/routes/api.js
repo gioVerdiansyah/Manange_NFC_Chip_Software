@@ -6,5 +6,6 @@ export const apiRoutes = {
     scene: url + "admin/scene",
     units: url + "admin/units",
     sceneSearch: url + "admin/scene/search/",
+    unitSearch: url + "admin/units/search/",
     dashboardData: url + "admin/dashboard"
 }
