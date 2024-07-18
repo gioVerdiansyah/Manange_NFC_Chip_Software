@@ -1,6 +1,6 @@
 const DASHBOARD_STORE = "DASHBOARD_STORE"
 
-export function setDashbaordData(data) {
+export function setDashboardData(data) {
     return {
         type: DASHBOARD_STORE,
         data
@@ -11,6 +11,10 @@ const initialState = {
     total_machine: 0,
     total_machine_used: 0,
     latest_machine_used: {
+        name: "-",
+        date: "-"
+    },
+    latest_machine_buy: {
         name: "-",
         date: "-"
     }
@@ -24,8 +28,12 @@ function dashboardDataStore(state = initialState, action){
                 total_machine: action.data.total_machine,
                 total_machine_used: action.data.total_machine_used,
                 latest_machine_used: {
-                    name: action.data.last_machine_used.name,
-                    date: action.data.last_machine_used.date
+                    name: action.data.latest_machine_used.name,
+                    date: action.data.latest_machine_used.date
+                },
+                latest_machine_buy: {
+                    name: action.data.latest_machine_buy.name,
+                    date: action.data.latest_machine_buy.date
                 }
             }
         default:

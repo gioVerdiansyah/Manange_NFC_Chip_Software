@@ -5,7 +5,6 @@ import { setLoading } from "../redux/store/trueOrFalseStore.js";
 import fetcher from "../utils/fetcher.js";
 import { apiRoutes } from "../routes/api.js";
 import { toast } from "react-toastify";
-import Cookie from "js-cookie";
 import {
   setMachineData,
   setMachineFields,
@@ -16,7 +15,6 @@ import showConfirmAlert from "./components/core/ConfirmAlert.jsx";
 import showLoadingAlert, {
   closeLoadingAlert,
 } from "./components/core/ShowLoadingAlert.jsx";
-import Cookies from "js-cookie";
 import Pagination from "./components/core/Pagination.jsx";
 import InputComponent from "./components/core/Input.jsx";
 import { MdOutlineSearch } from "react-icons/md";
@@ -38,7 +36,7 @@ const MachineScene = () => {
       method: "GET",
       headers: {
         Authorization:
-          "Bearer " + Cookie.get(process.env.REACT_APP_COOKIE_NAME),
+          "Bearer " + localStorage.getItem(process.env.REACT_APP_COOKIE_NAME),
       },
     });
     if (res?.meta?.isSuccess) {
@@ -57,7 +55,7 @@ const MachineScene = () => {
         method: method,
         headers: {
           Authorization:
-            "Bearer " + Cookie.get(process.env.REACT_APP_COOKIE_NAME),
+            "Bearer " + localStorage.getItem(process.env.REACT_APP_COOKIE_NAME),
         },
         body: JSON.stringify(fields),
       });
@@ -98,7 +96,7 @@ const MachineScene = () => {
         body: JSON.stringify({ id: data.id }),
         headers: {
           Authorization:
-            "Bearer " + Cookies.get(process.env.REACT_APP_COOKIE_NAME),
+            "Bearer " + localStorage.getItem(process.env.REACT_APP_COOKIE_NAME),
         },
       });
 
@@ -123,7 +121,7 @@ const MachineScene = () => {
       const res = await fetcher(apiRoutes.sceneSearch + query, {
         headers: {
           Authorization:
-            "Bearer " + Cookie.get(process.env.REACT_APP_COOKIE_NAME),
+            "Bearer " + localStorage.getItem(process.env.REACT_APP_COOKIE_NAME),
         },
       });
       if (res?.meta?.isSuccess) {
@@ -139,6 +137,7 @@ const MachineScene = () => {
     fetchMachineData();
   }, []);
 
+  console.log(machineData.data);
   return (
     <>
       <NavbarAdmin />
@@ -193,6 +192,8 @@ const MachineScene = () => {
                 <th className="text-center">No</th>
                 <th className="text-center">Name</th>
                 <th className="text-center">Scene ID</th>
+                <th className="text-center">Total Units</th>
+                <th className="text-center">Total Used</th>
                 <th className="text-center">Action</th>
               </tr>
             </thead>
@@ -203,6 +204,8 @@ const MachineScene = () => {
                     <td className="text-center">{number + 1}</td>
                     <td className="text-center">{item.machine_name}</td>
                     <td className="text-center">{item.scene_id}</td>
+                    <td className="text-center">{item.was_purchased}</td>
+                    <td className="text-center">{item.total_used}</td>
                     <td className="flex gap-5 justify-center">
                       <button
                         onClick={() =>
@@ -236,7 +239,7 @@ const MachineScene = () => {
                 ))
               ) : (
                 <tr>
-                  <td colSpan="4">
+                  <td colSpan="6">
                     <div className="flex flex-row justify-center items-center">
                       <LoadingAnimation className="w-14" />
                       <p className="font-bold ms-3">Fetching Data...</p>

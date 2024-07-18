@@ -1,5 +1,4 @@
 import React, { createContext, useEffect } from "react";
-import Cookie from "js-cookie";
 import { useDispatch, useSelector } from "react-redux";
 import { changeLoginStatus } from "../store/loginStore.js";
 import { useNavigate } from "react-router-dom";
@@ -12,9 +11,9 @@ const AuthProvider = ({ children }) => {
     const dispatch = useDispatch()
     const navigate = useNavigate()
     const cookieName = process.env.REACT_APP_COOKIE_NAME
-    
+
     useEffect(() => {
-        const hasAccess = Cookie.get(cookieName);
+        const hasAccess = localStorage.getItem(cookieName);
 
         if (hasAccess) {
             dispatch(changeLoginStatus(true))
@@ -26,15 +25,16 @@ const AuthProvider = ({ children }) => {
             navigate(pathRoutes.dashboard)
         }
     }, []);
-    
+
     const loginUser = (token) => {
-        Cookie.set(cookieName, token, { expires: 3 });
+        localStorage.setItem(cookieName, token)
+
         dispatch(changeLoginStatus(false))
         navigate(pathRoutes.dashboard)
     };
-    
+
     const logoutUser = () => {
-        Cookie.remove(cookieName);
+        localStorage.removeItem(cookieName)
         dispatch(changeLoginStatus(false))
     };
 

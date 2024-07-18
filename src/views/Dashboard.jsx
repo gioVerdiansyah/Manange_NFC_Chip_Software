@@ -1,12 +1,11 @@
 import { Fade } from "react-awesome-reveal";
 import { Link } from "react-router-dom";
 import { pathRoutes } from "../routes/web";
-import { handGif, historyVector, jurnalVector, machineVector } from "../assets";
+import { handGif, historyVector, jurnalVector, machineVector, payClickVector } from "../assets";
 import { useDispatch, useSelector } from "react-redux";
 import fetcher from "../utils/fetcher";
 import { apiRoutes } from "../routes/api";
-import Cookie from "js-cookie";
-import { setDashbaordData } from "../redux/store/dashboardDataStore";
+import { setDashboardData } from "../redux/store/dashboardDataStore";
 import { toast } from "react-toastify";
 import { useEffect } from "react";
 import formatDate from "../utils/date";
@@ -20,13 +19,13 @@ export function DashboardView() {
       method: "GET",
       headers: {
         Authorization:
-          "Bearer " + Cookie.get(process.env.REACT_APP_COOKIE_NAME),
+          "Bearer " + localStorage.getItem(process.env.REACT_APP_COOKIE_NAME),
       },
     });
 
-    // console.log(res)
+    console.log(res);
     if (res?.meta?.isSuccess) {
-      dispatch(setDashbaordData(res?.data));
+      dispatch(setDashboardData(res?.data));
     } else {
       toast.error(res?.meta?.message);
     }
@@ -54,7 +53,7 @@ export function DashboardView() {
         </Fade>
       </div>
       <div className="flex flex-row gap-5">
-        <Fade delay={800} direction="up" >
+        <Fade delay={800} direction="up">
           <div className="card bg-base-100 image-full h-full shadow-xl">
             <figure className="relative">
               <img
@@ -93,7 +92,7 @@ export function DashboardView() {
             <figure className="relative">
               <img
                 src={historyVector}
-                alt="Jurnal Logo Vector"
+                alt="Journal Logo Vector"
                 className="!h-28 absolute -bottom-8 -left-8"
               />
             </figure>
@@ -112,16 +111,40 @@ export function DashboardView() {
             </div>
           </div>
         </Fade>
+        <Fade delay={2400} direction="up">
+          <div className="card bg-base-100 image-full h-full shadow-xl">
+            <figure className="relative">
+              <img
+                src={payClickVector}
+                alt="Jurnal Logo Vector"
+                className="!h-28 absolute -bottom-8 -left-8"
+              />
+            </figure>
+            <div className="card-body">
+              <h2 className="card-title justify-center">Last Machine Buy</h2>
+              <div>
+                <p className="text-center text-xl font-bold text-wrap">
+                  {dashboardData.latest_machine_buy.name}
+                </p>
+                <p className="text-center text-xl font-bold text-wrap">
+                  {dashboardData.latest_machine_buy.date !== null &&
+                    dashboardData.latest_machine_buy.date !== "-" &&
+                    formatDate(dashboardData.latest_machine_buy.date)}
+                </p>
+              </div>
+            </div>
+          </div>
+        </Fade>
       </div>
       <div className="w-8/12 mt-8">
-      <Fade delay={3000}>
-        <p>
-          This admin software manages NFC data for scanning 3D model equipment
-          or machinery, detailing their parts and functions. It provides a
-          user-friendly interface for organizing NFC data, allowing users to
-          add, edit, and deleted.
-        </p>
-      </Fade>
+        <Fade delay={3000}>
+          <p>
+            This admin software manages NFC data for scanning 3D model equipment
+            or machinery, detailing their parts and functions. It provides a
+            user-friendly interface for organizing NFC data, allowing users to
+            add, edit, and deleted.
+          </p>
+        </Fade>
       </div>
     </div>
   );

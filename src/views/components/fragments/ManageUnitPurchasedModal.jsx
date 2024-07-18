@@ -15,8 +15,9 @@ export default function ManageUnitPurchasedModal({ id, title, onSubmit }) {
   const dispatch = useDispatch();
   const isLoading = useSelector((state) => state.trueOrFalseState).isLoading;
   const fields = useSelector((state) => state.manageUnitState).fields;
-  const list_machine = useSelector((state) => state.manageUnitState).unit_data
-    ?.machine_state;
+  const list_machine = useSelector(
+    (state) => state.manageMachineState
+  ).machine_data.data;
   const errorFields = useSelector((state) => state.manageUnitState).errors;
   const zeroFields = { unit_id: "", scene_id: "" };
 

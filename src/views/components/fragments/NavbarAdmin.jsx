@@ -1,7 +1,6 @@
 import React from "react";
 import Logo from "../../../assets/images/logo ut school.png";
 import { Link, useNavigate } from "react-router-dom";
-import Cookie from "js-cookie";
 import { pathRoutes } from "../../../routes/web";
 import fetcher from "../../../utils/fetcher";
 import { apiRoutes } from "../../../routes/api";
@@ -26,11 +25,12 @@ const NavbarAdmin = () => {
       const res = await fetcher(apiRoutes.logout, {
         method: "POST",
         headers: {
-          Authorization: "Bearer " + Cookie.get(cookieName),
+          Authorization:
+            "Bearer " + localStorage.getItem(process.env.REACT_APP_COOKIE_NAME),
         },
       });
       if (res?.meta?.isSuccess) {
-        Cookie.remove(cookieName);
+        localStorage.getItem(process.env.REACT_APP_COOKIE_NAME);
         navigate(pathRoutes.login);
       } else {
         toast(res?.meta?.message);
