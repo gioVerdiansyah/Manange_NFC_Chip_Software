@@ -1,14 +1,9 @@
-import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { changeTheme } from "../../redux/store/themeStore";
 
 export default function Navbar(){
     const themeSet = useSelector(state => state.themeState)
     const dispatch = useDispatch()
-
-    useEffect(() => {
-        console.log(themeSet)
-    })
 
     return (
       <div className="navbar flex justify-between bg-primary text-primary-content shadow-sm shadow-slate-800 dark:shadow-slate-800">

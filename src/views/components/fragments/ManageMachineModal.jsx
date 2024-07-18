@@ -36,7 +36,6 @@ export default function ManageMachineModal({ id, title, onSubmit }) {
       dispatch(setLoading(true));
       dispatch(setFieldsMachineError(zeroFields));
       const hasSubmit = await onSubmit();
-      console.log(hasSubmit);
       if (hasSubmit) {
         handleResetStateFields()
       }

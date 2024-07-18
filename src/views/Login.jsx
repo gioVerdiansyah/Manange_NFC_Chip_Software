@@ -40,7 +40,6 @@ export function LoginView() {
     const result = loginSchema.safeParse(fields);
     if (!result.success) {
       const errors = result.error.formErrors.fieldErrors;
-      console.log(errors);
       dispatch(setLoginErrorFields(errors));
     } else {
       dispatch(setLoading(true));
@@ -50,9 +49,7 @@ export function LoginView() {
       });
       setTimeout(() => {
         dispatch(setLoading(false));
-        console.log(res);
         if(res?.meta?.isSuccess){
-          loginUser(res?.data)
           toast.success(res?.meta?.message, { autoClose: 5000 });
         }else{
           toast.error(res?.meta?.message, { autoClose: 5000 });

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { MDCON, RICON, RXCON } from '../../../lib/icons'
 import BreadCrumbsItem from '../elements/BreadCrumbsItem';
-import { useLocation, useParams } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 
 const BreadCrumbs = () => {
 
@@ -13,9 +13,8 @@ const BreadCrumbs = () => {
     const currentLink = useLocation().pathname
     useEffect(()=>{
         setCurrent(currentLink)
-        setActive(links.filter((item)=>item.path == current))
+        setActive(links.filter((item)=>item.path === current))
     },[currentLink,current])
-    console.log(active)
   return(
     <div class="breadcrumbs text-3xl">
   <ul>

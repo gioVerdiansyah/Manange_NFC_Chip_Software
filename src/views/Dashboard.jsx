@@ -23,7 +23,6 @@ export function DashboardView() {
       },
     });
 
-    console.log(res);
     if (res?.meta?.isSuccess) {
       dispatch(setDashboardData(res?.data));
     } else {

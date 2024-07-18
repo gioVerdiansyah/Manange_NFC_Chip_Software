@@ -34,7 +34,6 @@ const UnitsPurchased = () => {
           "Bearer " + localStorage.getItem(process.env.REACT_APP_COOKIE_NAME),
       },
     });
-    console.log(res);
     if (res?.meta?.isSuccess) {
       dispatch(setUnitData(res.data));
       setTimeout(() => {
@@ -46,7 +45,6 @@ const UnitsPurchased = () => {
   };
 
   const handleSendData = async (modalType, method) => {
-    console.log(fields);
     try {
       const res = await fetcher(apiRoutes.units, {
         method: method,
@@ -56,7 +54,6 @@ const UnitsPurchased = () => {
         },
         body: JSON.stringify(fields),
       });
-      console.log(res);
 
       await new Promise((resolve) => setTimeout(resolve, 1000));
 

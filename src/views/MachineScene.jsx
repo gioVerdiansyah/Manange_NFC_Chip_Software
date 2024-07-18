@@ -59,7 +59,6 @@ const MachineScene = () => {
         },
         body: JSON.stringify(fields),
       });
-      console.log(res);
 
       await new Promise((resolve) => setTimeout(resolve, 1000));
 
@@ -125,7 +124,6 @@ const MachineScene = () => {
         },
       });
       if (res?.meta?.isSuccess) {
-        console.log(res);
         dispatch(setMachineData(res.data));
       } else {
         toast.error(res?.meta?.message);
@@ -137,7 +135,6 @@ const MachineScene = () => {
     fetchMachineData();
   }, []);
 
-  console.log(machineData.data);
   return (
     <>
       <NavbarAdmin />
