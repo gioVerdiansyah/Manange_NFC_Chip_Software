@@ -17,6 +17,7 @@ import NavbarAdmin from "./components/fragments/NavbarAdmin.jsx";
 import ManageUnitPurchasedModal from "./components/fragments/ManageUnitPurchasedModal.jsx";
 import { setUnitData, setUnitFields } from "../redux/store/manageUnitStore.js";
 import { setSearchField } from "../redux/store/searchStore.js";
+import formatDate from "../utils/date.js";
 
 const UnitsPurchased = () => {
   const dispatch = useDispatch();
@@ -199,7 +200,9 @@ const UnitsPurchased = () => {
                     <td className="text-center">{item.id}</td>
                     <td className="text-center">{item.machine_name}</td>
                     <td className="text-center">{item.total_used}</td>
-                    <td className="text-center">{item.last_used ?? "-"}</td>
+                    <td className="text-center">
+                      {item.last_used ? formatDate(item.last_used) : "-"}
+                    </td>
                     <td className="flex gap-5 justify-center">
                       <button
                         onClick={() =>

@@ -19,7 +19,7 @@ const fetcher = async (url, options) => {
 
   try {
     const response = await fetch(url, requestOptions);
-    if (response.status === 401) localStorage.getItem(process.env.REACT_APP_COOKIE_NAME);
+    if (response.status === 401) localStorage.removeItem(process.env.REACT_APP_COOKIE_NAME);
     const result = await response.json()
     return result
   } catch (error) {

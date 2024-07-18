@@ -1,12 +1,22 @@
 {
-  "name": "admin_nfc_ut",
-  "version": "0.1.0",
+  "name": "ut_school_3d_machine_ar",
+  "version": "1.0.0",
   "private": true,
-  "description": "A software to manange data NFC ID",
-  "author": "Verdiansyh && KaitoDeCode",
-  "proxy": "http://localhost:4545/",
+  "description": "A software to manage 3D machine AR data",
+  "author": "UT School",
   "build": {
-    "appId": "com.uts_nfc"
+    "productName": "UT School 3D Machine AR",
+    "appId": "com.uts-3d-machine-ar",
+    "win": {
+      "icon": "build/logo.png"
+    },
+    "nsis": {
+      "deleteAppDataOnUninstall": true,
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true,
+      "shortcutName": "UT School 3D Machine AR",
+      "artifactName": "UT School 3D Machine AR.Setup.${version}.${ext}"
+    }
   },
   "main": "public/electron.js",
   "homepage": "./",
@@ -15,16 +25,12 @@
     "@testing-library/jest-dom": "^5.17.0",
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^13.5.0",
-    "axios": "^1.7.2",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.1",
     "cross-env": "^7.0.3",
     "dotenv": "^16.4.5",
     "electron-is-dev": "^3.0.1",
-    "fs": "^0.0.1-security",
     "lucide-react": "^0.397.0",
-    "path-browserify": "^1.0.1",
-    "prop-types": "^15.8.1",
     "react": "^18.3.1",
     "react-alert-confirm": "^4.1.8",
     "react-awesome-reveal": "^4.2.12",

@@ -26,7 +26,7 @@ export function DashboardView() {
     if (res?.meta?.isSuccess) {
       dispatch(setDashboardData(res?.data));
     } else {
-      toast.error(res?.meta?.message);
+      toast.error(res?.meta?.message, {autoClose: 10000});
     }
   };
 
@@ -45,7 +45,7 @@ export function DashboardView() {
         <Fade duration={3000}>
           <h2 className="text-center text-lg mb-5">
             Manage your{" "}
-            <Link to={pathRoutes.machine} className="underline">
+            <Link to={pathRoutes.machineScene} className="underline">
               3d Machine Data
             </Link>
           </h2>

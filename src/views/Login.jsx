@@ -50,9 +50,10 @@ export function LoginView() {
       setTimeout(() => {
         dispatch(setLoading(false));
         if(res?.meta?.isSuccess){
-          toast.success(res?.meta?.message, { autoClose: 5000 });
+          loginUser(res?.data)
+          toast.success(res?.meta?.message, { autoClose: 3000 });
         }else{
-          toast.error(res?.meta?.message, { autoClose: 5000 });
+          toast.error(res?.meta?.message, { autoClose: 10000 });
         }
       }, 2000);
     }
